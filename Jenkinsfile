@@ -1,6 +1,6 @@
 /* Requires the Docker Pipeline plugin */
 pipeline {
-    agent { docker { image 'golang:1.20' } }
+    agent { docker.image('golang:1.20') } }
     stages {
         stage('build') {
             steps {

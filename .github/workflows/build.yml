@@ -2,7 +2,7 @@ name: Run test
 on: workflow_dispatch
 jobs:
   tests:
-    runs-on: linux
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2

@@ -22,8 +22,8 @@ jobs:
 
       - name: Make branch
         run: |
-          git config --local user.name "nml-bot"
-          git config --local user.email "nml-bot@nml-nkm.com"
+          git config --local user.name "misitang-nissan"
+          git config --local user.email "misi_tang@mail.nissan.co.jp"
           git checkout -b release/${{ github.event.inputs.version }}
           git push --set-upstream origin release/${{ github.event.inputs.version }}
 

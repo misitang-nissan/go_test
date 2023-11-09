@@ -37,7 +37,8 @@ jobs:
 
       - name: Create pull request
         env:
-          GITHUB_TOKEN: ${{ secrets.NML_BOT_GITHUB_TOKEN_TO_CREATE_PR }}
+          # GITHUB_TOKEN: ${{ secrets.NML_BOT_GITHUB_TOKEN_TO_CREATE_PR }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           git push origin release/${{ github.event.inputs.version }}
           gh pr create --title "New Release ver${{ github.event.inputs.version }}" --body "Merge v${{ github.event.inputs.version }} to ${{ github.ref_name }}"

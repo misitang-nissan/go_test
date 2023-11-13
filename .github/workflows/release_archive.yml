@@ -25,15 +25,15 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version-file: "go.mod"
-      - name: Setup java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: Generate code
-        run: |
-          make init ACTIONS=true
-          make code ACTIONS=true
+      # - name: Setup java
+      #   uses: actions/setup-java@v3
+      #   with:
+      #     distribution: 'temurin'
+      #     java-version: '17'
+      # - name: Generate code
+      #   run: |
+      #     make init ACTIONS=true
+      #     make code ACTIONS=true
       - name: Run build
         run: go build -o ngx-app cmd/main.go
       - name: Upload build outputs to artifact

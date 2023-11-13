@@ -34,17 +34,17 @@ jobs:
       #   run: |
       #     make init ACTIONS=true
       #     make code ACTIONS=true
-      - name: Run build
-        run: go build -o ngx-app cmd/main.go
+      - name: Run build and archive
+        run: |
+          go build -o ngx-app cmd/main.go
+          tar -czvf ${{ env.artifact_name }}.tgz ngx-app config/*
       - name: Upload build outputs to artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.artifact_name }}
-          path: |
-            ngx-app
-            config/*
+          path: ${{ env.artifact_name }}.tgz
       - name: Save binary on GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: gh release upload ${{ github.event.inputs.tag }} ${{ env.artifact_name }} --clobber
+        run: gh release upload ${{ github.event.inputs.tag }} ${{ env.artifact_name }}.tgz --clobber

@@ -1,0 +1,50 @@
+name: 'Release: Archive'
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Input release tag'
+        required: true
+
+jobs:
+  build-archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.tag }}
+          fetch-depth: 0
+          token: ${{ github.token }}
+          submodules: true
+      - name: 'Setup archive name'
+        run: |
+          echo "artifact_name=build_output_${{ github.event.inputs.tag }}_$(date "+%Y%m%d")" >> "$GITHUB_ENV"
+      - name: Setup go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: "go.mod"
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Generate code
+        run: |
+          make init ACTIONS=true
+          make code ACTIONS=true
+      - name: Run build
+        run: go build -o ngx-app cmd/main.go
+      - name: Upload build outputs to artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.artifact_name }}
+          path: |
+            ngx-app
+            config/*
+      - name: Save binary on GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release upload ${{ github.event.inputs.tag }} ${{ env.artifact_name }} --clobber

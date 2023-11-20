@@ -1,0 +1,26 @@
+
+name: 'Release: Publish'
+on:
+  release:
+    types: [released]
+
+jobs:
+  push-to-main:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      tag_name: ${{ github.event.inputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up git
+        run: |
+          git config --local user.name "nml-backend-bot"
+          git config --local user.email "nml-backend-bot@nml-nkm.com"
+      - name: Overwrite market branch
+        run: |
+          git checkout ${{ github.event.release.tag_name }}
+          git checkout -b workaround
+          git push origin workaround:main --force

@@ -16,7 +16,7 @@ jobs:
     download-and-upload:
         runs-on: ubuntu-latest
         env:
-            artifact_name: ${{ github.event.inputs.artifact_name }}
+            artifact_name: ${{ inputs.artifact_name }}
         steps:
           - id: download
             name: 'download workflow run artifact'
@@ -30,7 +30,7 @@ jobs:
             env:
                 GH_TOKEN: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
                 GH_REPO: ${{ github.repository }}
-            run: gh release upload ${{ github.event.inputs.release_tag }} ${{ env.artifact_name }}.tar --clobber
+            run: gh release upload ${{ inputs.release_tag }} ${{ env.artifact_name }}.tar --clobber
           - name: Clear temporary file
             working-directory: ${{ steps.download.outputs.path }}
             run: 

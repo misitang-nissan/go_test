@@ -3,6 +3,9 @@ on:
     push:
         branches:
             - 'main'
+    pull_request:
+        branches:
+            - 'main'
 
 jobs:
     setup-artifact-name:
@@ -13,7 +16,7 @@ jobs:
           - id: step1
             run: echo "artifact_name=build_output_$(date "+%Y%m%d%H%M%S")" >> $GITHUB_OUTPUT
 
-    build:
+    build-output-binary:
         needs: setup-artifact-name
         uses: misitang-nissan/go_test/.github/workflows/build_reusable.yml@main
         with:

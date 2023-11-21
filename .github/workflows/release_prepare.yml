@@ -73,15 +73,19 @@ jobs:
       - build-archive
     runs-on: ubuntu-latest
     env:
-      artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}
-      upload_file_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}.zip
+      artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}s
     steps:
-      - name: 'download workflow run artifact'
+      - id: download
+        name: 'download workflow run artifact'
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.artifact_name }}
+      - name: archive
+        run: tar -cvf ${{ env.artifact_name }}.tar tmp/${{ env.artifact_name }}
       - name: Save binary on GitHub Release
         env:
           GH_TOKEN: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
           GH_REPO: ${{ github.repository }}
-        run: gh release upload ${{ github.event.inputs.version }} ${{ env.artifact_name }} --clobber
+        run: gh release upload ${{ github.event.inputs.version }} ${{ env.artifact_name }}.tar --clobber
+      - name: Clear downloaded file
+        run: rm -rf tmp

@@ -73,4 +73,5 @@ jobs:
       - build-archive
     uses: ./.github/workflows/upload_github_release_assets.yml
     with:
+      release_tag: ${{ github.event.inputs.version }}
       artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}

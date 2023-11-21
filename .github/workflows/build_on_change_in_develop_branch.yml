@@ -1,0 +1,18 @@
+name: 'Build on push or merge event in develop branch'
+on:
+    push:
+        branches:
+            - 'main'
+
+jobs:
+    builds:
+        runs-on: 'ubuntu-latest'
+        steps: 
+          - name: setup artifact name
+            run: echo "artifact_name=build_output_$(date "+%Y%m%d%H%M%S")" >> "$GITHUB_ENV"
+          - name : 'Build'
+            uses: build_reusable.yml@main
+            with:
+                on_branch: ${{ github.action.ref.branch }}
+                token: ${{ secrets.GITHUB_TOKEN }}
+                artifact_name: ${{ env.artifact_name }}

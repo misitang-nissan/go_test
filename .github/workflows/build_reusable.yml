@@ -1,18 +1,31 @@
 name: Run build binary output
-on: workflow_dispatch
+on: 
+  workflow_call:
+    inputs: 
+      on_branch:
+        required: true
+        type: string
+        description: 'run build on which branch'
+      token:
+        required: true
+        type: string
+        description: 'token for github run'
+      artifact_name:
+        required: true
+        type: string
+        description: 'artifact name for build output binary'
+
 jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
+          ref: ${{ inputs.on_branch }}
           fetch-depth: 0
-          token: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
+          token: ${{ inputs.token }}
           submodules: true
-      - name: setup artifact name
-        run: |
-          echo "artifact_name=build_output_$(date "+%Y%m%d%H%M%S")" >> "$GITHUB_ENV"
       - name: Setup go
         uses: actions/setup-go@v3
         with:
@@ -32,7 +45,7 @@ jobs:
           go build -ldflags '-extldflags=-static' -o ngx-app cmd/front-api/main.go
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.artifact_name }}
+          name: ${{ inputs.artifact_name }}
           path: |
             ngx-app
             ./manifest.yml

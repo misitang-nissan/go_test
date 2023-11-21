@@ -8,43 +8,27 @@ on:
         required: true
 
 jobs:
+  setup-artifact-name:
+    runs-on: 'ubuntu-latest'
+    outputs:
+        artifact_name: ${{ steps.step1.outputs.artifact_name }}
+    steps: 
+      - id: step1
+        run: echo "artifact_name=build_output_${{ github.event.inputs.tag }}_$(date '+%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+  
   build-archive:
+    needs: setup-artifact-name
+    uses: ./.github/workflows/build_reusable.yml
+    with:
+      on_branch: ${{ github.action.ref.branch }}
+      artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}
+
+  upload-archive:
+    needs: setup-artifact-name
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: release/${{ github.event.inputs.tag }}
-          fetch-depth: 0
-          token: ${{ github.token }}
-          submodules: true
-      - name: 'Setup archive name'
-        run: |
-          echo "artifact_name=build_output_${{ github.event.inputs.tag }}_$(date "+%Y%m%d")" >> "$GITHUB_ENV"
-      - name: Setup go
-        uses: actions/setup-go@v3
-        with:
-          go-version-file: "go.mod"
-      # - name: Setup java
-      #   uses: actions/setup-java@v3
-      #   with:
-      #     distribution: 'temurin'
-      #     java-version: '17'
-      # - name: Generate code
-      #   run: |
-      #     make init ACTIONS=true
-      #     make code ACTIONS=true
-      - name: Run build and archive
-        run: |
-          go build -o ngx-app cmd/main.go
-          tar -czvf ${{ env.artifact_name }}.tgz ngx-app config/*
-      - name: Upload build outputs to artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.artifact_name }}
-          path: ${{ env.artifact_name }}.tgz
       - name: Save binary on GitHub Release
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
           GH_REPO: ${{ github.repository }}
-        run: gh release upload ${{ github.event.inputs.tag }} ${{ env.artifact_name }}.tgz --clobber
+        run: gh release upload ${{ github.event.inputs.tag }} ${{ needs.setup-artifact-name.outputs.artifact_name }} --clobber

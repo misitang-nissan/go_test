@@ -14,7 +14,7 @@ jobs:
           - id: step1
             run: 
                 |
-                echo "release_tag=$(echo ${{ github.ref_name }} | sed 's/release\///g')" >> $GITHUB_OUTPUT
+                echo "release_tag=$(echo ${{ github.event.base_ref }} | sed 's/release\///g')" >> $GITHUB_OUTPUT
                 echo "artifact_name=build_output_$(date "+%Y%m%d%H%M%S")" >> $GITHUB_OUTPUT
 
     build-output-binary:

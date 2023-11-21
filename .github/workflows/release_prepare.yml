@@ -80,9 +80,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.artifact_name }}
-          path: ${{ env.upload_file_name }}
       - name: Save binary on GitHub Release
         env:
           GH_TOKEN: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
           GH_REPO: ${{ github.repository }}
-        run: gh release upload ${{ github.event.inputs.version }} ${{ env.upload_file_name }} --clobber
+        run: gh release upload ${{ github.event.inputs.version }} ${{ env.artifact_name }} --clobber

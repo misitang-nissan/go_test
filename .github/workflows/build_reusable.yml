@@ -12,7 +12,7 @@ on:
         description: 'artifact name for build output binary'
 
 jobs:
-  tests:
+  run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

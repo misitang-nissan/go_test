@@ -17,7 +17,7 @@ jobs:
                 echo "${{ github.event.base_ref }}"
                 echo "${{ github.event.ref }}"
                 echo "${{ github.action.ref.branch }}"
-                echo "release_tag=$(echo ${{ github.push.ref }} | sed 's/release\///g')" >> $GITHUB_OUTPUT
+                echo "release_tag=$(echo ${{ github.event.ref }} | sed 's/ref\/head\/release\///g')" >> $GITHUB_OUTPUT
                 echo "artifact_name=build_output_$(date "+%Y%m%d%H%M%S")" >> $GITHUB_OUTPUT
 
         

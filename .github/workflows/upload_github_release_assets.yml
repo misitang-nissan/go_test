@@ -28,7 +28,7 @@ jobs:
             run: tar -cvf ${{ env.artifact_name }}.tar ${{ env.artifact_name }}
           - name: Save binary on GitHub Release
             env:
-                GH_TOKEN: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
+                GH_TOKEN: ${{ github.token }}
                 GH_REPO: ${{ github.repository }}
             run: gh release upload ${{ inputs.release_tag }} ${{ env.artifact_name }}.tar --clobber
           - name: Clear temporary file

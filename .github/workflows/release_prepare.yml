@@ -72,9 +72,17 @@ jobs:
       - setup-artifact-name
       - build-archive
     runs-on: ubuntu-latest
+    env:
+      artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}
+      upload_file_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}.zip
     steps:
+      - name: 'download workflow run artifact'
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.artifact_name }}
+          path: ${{ env.upload_file_name }}
       - name: Save binary on GitHub Release
         env:
           GH_TOKEN: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
           GH_REPO: ${{ github.repository }}
-        run: gh release upload ${{ github.event.inputs.version }} ${{ needs.setup-artifact-name.outputs.artifact_name }} --clobber
+        run: gh release upload ${{ github.event.inputs.version }} ${{ env.upload_file_name }} --clobber

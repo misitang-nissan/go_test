@@ -80,6 +80,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.artifact_name }}
+          path: tmp/${{ env.artifact_name }}
       - name: archive
         run: tar -cvf ${{ env.artifact_name }}.tar tmp/${{ env.artifact_name }}
       - name: Save binary on GitHub Release

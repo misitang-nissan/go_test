@@ -1,8 +1,7 @@
-name: 'Build on push or merge event in develop branch'
+name: 'Auto Build on push/merge to develop branch'
 on:
     push:
         branches:
-            - 'main'
             - 'develop'
 
 jobs:

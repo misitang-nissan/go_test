@@ -23,11 +23,7 @@ jobs:
           git config --local user.email "${{ secrets.NML_BACKEND_BOT_USERNAME }}@nml-nkm"
           git checkout -b release/${{ github.event.inputs.version }}
           git push --set-upstream origin release/${{ github.event.inputs.version }}
-  
-  update-version:
-    runs-on: ubuntu-latest
-    needs: create-release-branch
-    steps:
+      
       - name: Project Version Up 
         run: |
           sed -i -e 's/^const VERSION_NAME = "[0-9].[0-9].[0-9]"/const VERSION_NAME = "${{ github.event.inputs.version }}"/g' cmd/front-api/main.go
@@ -35,10 +31,6 @@ jobs:
           git add .
           git commit --allow-empty -m "Bump up ngx front api version to ${{ github.event.inputs.version }}"
   
-  create-pull-request:
-    runs-on: ubuntu-latest
-    needs: update-version
-    steps:
       - name: Create pull request
         env:
           GITHUB_TOKEN: ${{ secrets.NML_BACKEND_BOT_TOKEN }}

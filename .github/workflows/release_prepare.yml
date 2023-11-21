@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: Project Version Up 
         run: |
-          sed -i -e 's/^const VERSION_NAME = "[0-9].[0-9].[0-9]"/const VERSION_NAME = "${{ github.event.inputs.version }}"/g' cmd/main.go
+          sed -i -e 's/^const VERSION_NAME = "[0-9].[0-9].[0-9]"/const VERSION_NAME = "${{ github.event.inputs.version }}"/g' cmd/front-api/main.go
           rm -rf cmd/front-api/main.go-e
           git add .
           git commit --allow-empty -m "Bump up ngx front api version to ${{ github.event.inputs.version }}"

@@ -1,3 +1,3 @@
 package cmd
 
-const VERSION_NAME = "1.0.3"
+const VERSION_NAME = "1.1.2"

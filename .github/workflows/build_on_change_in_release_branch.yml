@@ -14,22 +14,10 @@ jobs:
           - id: step1
             run: 
                 |
-                echo "release_tag=$(echo ${{ github.action.ref.branch }} | sed 's/release\///g')" >> $GITHUB_OUTPUT
+                echo "${{ github.event.base_ref }}"
+                echo "${{ github.event.ref }}"
+                echo "${{ github.action.ref.branch }}"
+                echo "release_tag=$(echo ${{ github.push.ref }} | sed 's/release\///g')" >> $GITHUB_OUTPUT
                 echo "artifact_name=build_output_$(date "+%Y%m%d%H%M%S")" >> $GITHUB_OUTPUT
 
-    build-output-binary:
-        needs: setup-artifact-name
-        uses: ./.github/workflows/build_reusable.yml
-        with:
-            on_branch: ${{ github.action.ref.branch }}
-            artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}
-    
-    update-release-draft:
-        needs: 
-            - setup-artifact-name
-            - build-output-binary
-        uses: ./.github/workflows/upload_github_release_assets.yml
-        with:
-            release_tag: ${{ needs.setup-artifact-name.outputs.release_tag }}
-            artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}
         

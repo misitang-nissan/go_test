@@ -23,7 +23,7 @@ jobs:
           git config --local user.email "${{ secrets.NML_BACKEND_BOT_USERNAME }}@nml-nkm"
           git checkout -b release/${{ github.event.inputs.version }}
           git push --set-upstream origin release/${{ github.event.inputs.version }}
-      
+          
       - name: Project Version Up 
         run: |
           sed -i -e 's/^const VERSION_NAME = "[0-9].[0-9].[0-9]"/const VERSION_NAME = "${{ github.event.inputs.version }}"/g' cmd/front-api/main.go
@@ -75,3 +75,4 @@ jobs:
     with:
       release_tag: ${{ github.event.inputs.version }}
       artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}
+

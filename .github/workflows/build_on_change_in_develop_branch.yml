@@ -11,7 +11,7 @@ jobs:
           - name: setup artifact name
             run: echo "artifact_name=build_output_$(date "+%Y%m%d%H%M%S")" >> "$GITHUB_ENV"
           - name : 'Build'
-            uses: build_reusable.yml@main
+            uses: misitang-nissan/go_test/.github/workflows/build_reusable.yml@main
             with:
                 on_branch: ${{ github.action.ref.branch }}
                 token: ${{ secrets.GITHUB_TOKEN }}

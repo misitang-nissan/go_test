@@ -3,16 +3,22 @@ on:
     push:
         branches:
             - 'main'
+env:
+    token: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-    builds:
+    setup-artifact-name:
         runs-on: 'ubuntu-latest'
+        outputs:
+            artifact_name: ${{ steps.step1.outputs.artifact_name }}
         steps: 
-          - name: setup artifact name
-            run: echo "artifact_name=build_output_$(date "+%Y%m%d%H%M%S")" >> "$GITHUB_ENV"
-          - name : 'Build'
-            uses: misitang-nissan/go_test/.github/workflows/build_reusable.yml@main
-            with:
-                on_branch: ${{ github.action.ref.branch }}
-                token: ${{ secrets.GITHUB_TOKEN }}
-                artifact_name: ${{ env.artifact_name }}
+          - id: step1
+            run: echo "artifact_name=build_output_$(date "+%Y%m%d%H%M%S")" >> $GITHUB_OUTPUT
+
+    build:
+        needs: setup-artifact-name
+        uses: misitang-nissan/go_test/.github/workflows/build_reusable.yml@main
+        with:
+            on_branch: ${{ github.action.ref.branch }}
+            token: ${{ github.action.env.token }}
+            artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}

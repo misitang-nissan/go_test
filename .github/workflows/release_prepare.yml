@@ -73,7 +73,7 @@ jobs:
       - build-archive
     runs-on: ubuntu-latest
     env:
-      artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}s
+      artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}
     steps:
       - id: download
         name: 'download workflow run artifact'

@@ -16,7 +16,7 @@ jobs:
 
     build-output-binary:
         needs: setup-artifact-name
-        uses: ./.github/workflows/build_reusable.yml@main
+        uses: ./.github/workflows/build_reusable.yml
         with:
             on_branch: ${{ github.action.ref.branch }}
             artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}

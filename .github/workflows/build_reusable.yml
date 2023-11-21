@@ -6,10 +6,6 @@ on:
         required: true
         type: string
         description: 'run build on which branch'
-      token:
-        required: true
-        type: string
-        description: 'token for github run'
       artifact_name:
         required: true
         type: string
@@ -24,7 +20,7 @@ jobs:
         with:
           ref: ${{ inputs.on_branch }}
           fetch-depth: 0
-          token: ${{ inputs.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           submodules: true
       - name: Setup go
         uses: actions/setup-go@v3

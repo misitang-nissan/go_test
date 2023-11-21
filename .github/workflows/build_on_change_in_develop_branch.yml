@@ -3,8 +3,6 @@ on:
     push:
         branches:
             - 'main'
-env:
-    token: '${{ secrets.GITHUB_TOKEN }}'
 
 jobs:
     setup-artifact-name:
@@ -20,5 +18,4 @@ jobs:
         uses: misitang-nissan/go_test/.github/workflows/build_reusable.yml@main
         with:
             on_branch: ${{ github.action.ref.branch }}
-            token: ${{ github.action.env.token }}
             artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}

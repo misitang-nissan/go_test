@@ -20,7 +20,6 @@ jobs:
         with:
           ref: ${{ inputs.on_branch }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
           submodules: true
       - name: Setup go
         uses: actions/setup-go@v3

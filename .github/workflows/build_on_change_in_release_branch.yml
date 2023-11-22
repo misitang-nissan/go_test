@@ -15,12 +15,12 @@ jobs:
             run: echo "release_tag=$(echo ${{ github.event.ref }} | sed 's/refs\/heads\/release\///g')" >> $GITHUB_OUTPUT
           - id: check_release_exists
             run: |
-                exists = false
-                release = $(gh release list | grep "${{ steps.parse_release_tag.outputs.release_tag }}")
-                if [ ${#release} -ne 0 ]; then
-                    exists = true
+                exists=false 
+                release=$(gh release list | grep "${{ steps.parse_release_tag.outputs.release_tag }}")
+                if [ ${#release} -ne 0 ]; then 
+                    exists=true
                 fi
-                echo "exists=$exists" >> $GITHUB_OUTPUT
+                echo "exists=$exists" >> $GITHUB_OUTPUT 
 
     setup-artifact-name:
         runs-on: 'ubuntu-latest'

@@ -1,26 +1,29 @@
 
-name: 'Release: Publish'
+name: 'Process on Github Release published'
 on:
   release:
-    types: [released]
+    types: 
+      - released
 
 jobs:
   push-to-main:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
-      GH_REPO: ${{ github.repository }}
-      tag_name: ${{ github.event.inputs.version }}
+      tag_name: ${{ github.event.release.tag_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up git
+      - id: check_main_branch
+        name: Check Main Branch
+        run: echo 'main_branch=$(git branch | grep branch)' >> $GITHUB_OUTPUT
+
+      - name: Prepare Main Branch
+        if: ${{ steps.check_main_branch.outputs.main_branch }} == ""
+        run: git branch main
+
+      - name: Force push to Main Branch
         run: |
-          git config --local user.name "nml-backend-bot"
-          git config --local user.email "nml-backend-bot@nml-nkm.com"
-      - name: Overwrite market branch
-        run: |
-          git checkout ${{ github.event.release.tag_name }}
-          git checkout -b workaround
-          git push origin workaround:main --force
+          git checkout main
+          git merge ${{ env.tag_name }}

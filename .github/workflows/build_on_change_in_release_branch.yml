@@ -30,7 +30,7 @@ jobs:
                 fi
                 echo "exists=$exists" >> $GITHUB_OUTPUT
                 EOF
-
+          - run: |
                 chmod +x check_script.sh
                 sh check_script.sh
                 echo $exists

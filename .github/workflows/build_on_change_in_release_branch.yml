@@ -19,6 +19,8 @@ jobs:
               fetch-depth: 0
               submodules: true
           - id: check_release_exists
+            env:
+                GH_TOKEN: ${{ github.token }}
             run: |
                 exists=false 
                 release=$(gh release list | grep "${{ steps.parse_release_tag.outputs.release_tag }}")

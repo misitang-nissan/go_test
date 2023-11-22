@@ -33,7 +33,7 @@ jobs:
           - run: |
                 chmod +x check_script.sh
                 sh check_script.sh
-                echo $exists
+                echo "exists=$exists" >> $GITHUB_OUTPUT
                 rm -rf check_script.sh
     setup-artifact-name:
         runs-on: 'ubuntu-latest'

@@ -33,6 +33,7 @@ jobs:
 
                 chmod +x check_script.sh
                 sh check_script.sh
+                echo $exists
                 rm -rf check_script.sh
     setup-artifact-name:
         runs-on: 'ubuntu-latest'
@@ -42,7 +43,7 @@ jobs:
         env:
             release_tag: ${{ needs.check-github-release.outputs.release_tag }}
         steps: 
-          - if: ${{ needs.check-github-release.outputs.release_exists }}
+          - if: ${{ needs.check-github-release.outputs.release_exists }} == true
             id: set_up_artifact_name
             run: echo "artifact_name=build_output_${{ env.release_tag }}_$(date "+%Y%m%d%H%M%S")" >> $GITHUB_OUTPUT
 

@@ -10,6 +10,9 @@ on:
         required: true
         type: string
         description: 'artifact name for build output binary'
+    secrets:
+      NML_BACKEND_BOT_TOKEN:
+        required: true
 
 jobs:
   run:
@@ -18,6 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
           ref: ${{ inputs.on_branch }}
           fetch-depth: 0
           submodules: true

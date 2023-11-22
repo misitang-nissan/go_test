@@ -21,6 +21,7 @@ jobs:
           - id: check_release_exists
             env:
                 GH_TOKEN: ${{ github.token }}
+            shell: eval {0}
             run: |
                 exists=false 
                 release=$(gh release list | grep "${{ steps.parse_release_tag.outputs.release_tag }}")

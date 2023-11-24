@@ -31,7 +31,7 @@ jobs:
                 else
                     check_ok=true
                 fi
-                echo "check_ok=${check_ok}" >> $GITHUB_OUTPUTS
+                echo "check_ok=${check_ok}" >> $GITHUB_OUTPUT
           - if: ${{ steps.run_staticcheck.outputs.check_ok == false }}
             run: |
               echo 'staticcheck fail'

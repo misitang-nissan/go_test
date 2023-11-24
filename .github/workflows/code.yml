@@ -27,7 +27,7 @@ jobs:
                 staticcheck ./... >> check_output.txt
                 export check_ok=false
                 if [ -s check_output.txt ]; then
-
+                    check_ok=false
                 else
                     check_ok=true
                 fi

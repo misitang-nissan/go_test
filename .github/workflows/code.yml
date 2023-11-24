@@ -1,0 +1,46 @@
+name: "Auto check by linter on pull request opened"
+on:
+    pull_request:
+        types:
+            - opened
+            - reopened
+
+jobs:
+    check-code:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v3
+            with:
+                token: ${{ secrets.NML_BACKEND_BOT_TOKEN }}
+                fetch-depth: 0
+                submodules: true
+          - name: Setup go
+            uses: actions/setup-go@v3
+            with:
+                go-version-file: "go.mod"
+          - name: 'Install Staticcheck'
+            run: go install honnef.co/go/tools/cmd/staticcheck@latest
+          - id: run_staticcheck
+            name: 'Run Staticcheck'
+            run: |
+                staticcheck ./... >> check_output.txt
+                export check_ok=false
+                if [ -s check_output.txt ]; then
+
+                else
+                    check_ok=true
+                fi
+                echo "check_ok=${check_ok}" >> $GITHUB_OUTPUTS
+          - if: ${{ steps.run_staticcheck.outputs.check_ok == false }}
+            run: |
+              echo 'staticcheck fail'
+              echo "::group::staticcheck problems:"
+              echo $(cat check_output.txt)
+              echo "::endgroup::"
+          - name: 'cleanup files'
+            run: | 
+              rm check_output.txt
+              if [ false = ${{ steps.run_staticcheck.outputs.check_ok }} ]; then
+                exit 1
+              fi

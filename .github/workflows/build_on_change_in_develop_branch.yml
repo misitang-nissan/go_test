@@ -19,3 +19,4 @@ jobs:
         with:
             on_branch: ${{ github.action.ref.branch }}
             artifact_name: ${{ needs.setup-artifact-name.outputs.artifact_name }}
+        secrets: inherit
